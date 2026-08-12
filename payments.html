@@ -1301,7 +1301,7 @@ function renderLedger(){
   lOpen.textContent=signedMoney(openingBal);lSales.textContent=signedMoney(salesTotal);lPayments.textContent=signedMoney(paymentsTotal);lBalance.textContent=signedMoney(running);ledgerTable.innerHTML=ledgerHtml;
 }
 
-function report(){let q=daily.reduce((s,x)=>s+x.qty,0),s=daily.reduce((s,x)=>s+x.qty*agency(x.agencyId).rate,0),p=payments.reduce((s,x)=>s+x.amount,0),o=agencies.reduce((s,a)=>s+opening(a),0);reportTable.innerHTML=[["Agencies",agencies.length],["Historical daily entries",daily.filter(x=>x.source==="Imported").length],["Manual daily entries",daily.filter(x=>x.source==="Manual").length],["Total lifted quantity",fmt(q)],["Total sales value incl. GST", "₹"+fmt(s)],["Opening credits (Old Balance + EMD + SD)","₹"+fmt(o)],["New payments","₹"+fmt(p)],["Net outstanding","₹"+fmt(Math.max(s-o-p,0))]].map(r=>`<tr><td>${esc(r[0])}</td><td><b>${esc(r[1])}</b></td></tr>`).join("")}
+function report(){let q=daily.reduce((s,x)=>s+x.qty,0),s=daily.reduce((s,x)=>s+x.qty*agency(x.agencyId).rate,0),p=payments.reduce((s,x)=>s+x.amount,0),o=agencies.reduce((s,a)=>s+opening(a),0);let rt=document.getElementById("reportTable");if(rt){rt.innerHTML=[["Agencies",agencies.length],["Historical daily entries",daily.filter(x=>x.source==="Imported").length],["Manual daily entries",daily.filter(x=>x.source==="Manual").length],["Total lifted quantity",fmt(q)],["Total sales value incl. GST", "₹"+fmt(s)],["Opening credits (Old Balance + EMD + SD)","₹"+fmt(o)],["New payments","₹"+fmt(p)],["Net outstanding","₹"+fmt(Math.max(s-o-p,0))]].map(r=>`<tr><td>${esc(r[0])}</td><td><b>${esc(r[1])}</b></td></tr>`).join("")}}
 function exportLedgerExcel(){
   let aid=+lAgency.value;
   if(!aid)return alert("Select an agency first.");
@@ -1662,7 +1662,6 @@ table td:not(:first-child):not(:nth-child(2)){
 </style>
 
 </head>
-<body>
 <div class="toolbar">
   <div><div class="brand">NTPC • Accounts Ledger</div><div class="agency">${esc(a.name)}</div></div>
   <div class="actions">
